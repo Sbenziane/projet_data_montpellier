@@ -4,7 +4,7 @@ Docker exécutant Nginx, OpenMapTiles et Flask (Python).
 
 ## Aperçu
 
-1. [Installer les prérequis](#installer-prerequis)
+1. [Installer les prérequis](#installer-les-prérequis)
 
     Avant d'installer le projet, assurez-vous que les conditions préalables suivantes ont été remplies.	
 
@@ -12,10 +12,9 @@ Docker exécutant Nginx, OpenMapTiles et Flask (Python).
 
     Vous devez télécharger le code depuis son dépôt sur GitHub.
 
-4. [Exécuter l'application](#executer-application)
+3. [Exécuter l'application](#exécuter-lapplication)
 
     À ce stade, vous aurez tous les éléments du projet en place.
-
 
 ___
 
@@ -33,7 +32,7 @@ Vérifiez si `docker-compose` est déjà installé en entrant la commande suivan
 which docker-compose
 ```
 
-Vérifier la comptatibilité de Docker Compose :
+Vérifier la compatibilité de Docker Compose :
 
  - [La référence de la version 3 du fichier Compose](https://docs.docker.com/compose/compose-file/)
 
@@ -78,7 +77,7 @@ cd ./projet_data_montpellier/
 ├── README.md
 ├── maps
 │	├── 2017-07-03_france_montpellier.mbtiles
-│   └── config.json
+│	└── config.json
 │	├── styles
 │       └── style.json
 │       └── style_1.json
@@ -88,7 +87,7 @@ cd ./projet_data_montpellier/
 │	├── style.css
 │	├── index.html
 │	├── kepler.html
-│   └── Dockerfile
+│	└── Dockerfile
 └── api
 	├── app.py
 	├── requirements.txt
@@ -100,7 +99,7 @@ cd ./projet_data_montpellier/
 
 ## Exécuter l'application
 
-2. Démarrez l'environnement :
+1. Démarrez l'environnement :
 
     ```sh
     docker-compose up -d
@@ -112,11 +111,11 @@ cd ./projet_data_montpellier/
     docker-compose logs -f # Suit la sortie du journal
     ```
 
-3. Ouvrez le dans votre navigateur :
+2. Ouvrez le dans votre navigateur :
 
-    * [http://localhost:8080](http://localhost:8080/) si vous disposez de windows 10 pro
+    * [http://localhost:8080](http://localhost:8080/) si vous disposez de Windows 10 pro
 	
-4. Arrêter et effacer les services
+3. Arrêter et effacer les services
 
     ```sh
     docker-compose down -v
