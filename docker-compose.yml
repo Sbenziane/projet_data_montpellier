@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+    openmaptiles:
+        image: klokantech/openmaptiles-server
+        volumes:
+            - "./maps:/data"
+        ports:
+            - 8081:80
+
+    app:
+        build: ./app
+        volumes:
+            - "./app:/usr/share/nginx/html"
+        ports:
+            - 8080:80
+            
+    api:
+        build: ./api
+        volumes:
+            - "./api:/app"
+        ports:
+            - 5000:5000

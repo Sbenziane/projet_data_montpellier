@@ -1,0 +1,13 @@
+div#map {
+    width: 80%;
+}
+
+div#select {
+    width: 19%;
+    vertical-align: top;
+}
+
+div#map, div#select {
+	display: inline-block;
+	height: 100vh;
+}

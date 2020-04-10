@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Montpellier - Map</title>
+	<link href="style.css" rel="stylesheet">
+	<link href='http://localhost:8081/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+
+<body>
+	<div id="map"></div>
+	<div id="select">
+		<input type="checkbox" id="monumentsHistoriques" name="monumentsHistoriques">
+		<label for="monumentsHistoriques">Monuments historiques</label>
+
+		<input type="checkbox" id="airesDeJeux" name="airesDeJeux">
+		<label for="airesDeJeux">Aires de jeux</label>
+
+		<input type="checkbox" id="lieuxDenseignements" name="lieuxDenseignements">
+		<label for="lieuxDenseignements">Lieux d'enseignements</label>
+
+		<input type="checkbox" id="hopitauxEtClinique" name="hopitauxEtClinique">
+		<label for="hopitauxEtClinique">Hopitaux et clinique</label>
+	</div>
+
+	<script src='http://localhost:8081/mapbox-gl.js'></script>
+
+	<script>
+		const monumentsHistoriquesInput = document.getElementById('monumentsHistoriques');
+		const airesJeuxInput = document.getElementById('airesDeJeux');
+		const lieuxDenseignementsInput = document.getElementById('lieuxDenseignements');
+		const hopitauxCliniqueInput = document.getElementById('hopitauxEtClinique');
+
+		let apiUrl = `http://${window.location.hostname}:5000/`;
+
+		// ---------------- Store DATA ---------------------
+
+		let monumentsHistoriques = null;
+		const xhrMonument = new XMLHttpRequest();
+		xhrMonument.open("GET",apiUrl + 'monuments-historiques',true);
+		xhrMonument.addEventListener('readystatechange', function() {
+			if (xhrMonument.readyState === XMLHttpRequest.DONE && xhrMonument.status === 200) {
+				monumentsHistoriques = JSON.parse(xhrMonument.responseText);
+			}
+		});
+		xhrMonument.send(null);
+
+		// -------------------------------------------------
+
+		let airesJeux = null;
+		const xhrAiresJeux = new XMLHttpRequest();
+		xhrAiresJeux.open("GET",apiUrl + 'aires-de-jeux',true);
+		xhrAiresJeux.addEventListener('readystatechange', function() {
+			if (xhrAiresJeux.readyState === XMLHttpRequest.DONE && xhrAiresJeux.status === 200) {
+				airesJeux = JSON.parse(xhrAiresJeux.responseText);
+			}
+		});
+		xhrAiresJeux.send(null);
+
+		// ---------------------------------------------------
+
+		let lieuxDenseignements = null;
+		const xhrLieuxDenseignements = new XMLHttpRequest();
+		xhrLieuxDenseignements.open("GET",apiUrl + 'lieux-enseignements',true);
+		xhrLieuxDenseignements.addEventListener('readystatechange', function() {
+			if (xhrLieuxDenseignements.readyState === XMLHttpRequest.DONE && xhrLieuxDenseignements.status === 200) {
+				lieuxDenseignements = JSON.parse(xhrLieuxDenseignements.responseText);
+			}
+		});
+		xhrLieuxDenseignements.send(null);
+
+		// -----------------------------------------------------
+
+		let hopitauxClinique = null;
+		const xhrHopitauxClinique = new XMLHttpRequest();
+		xhrHopitauxClinique.open("GET",apiUrl + 'hopitaux-clinique',true);
+		xhrHopitauxClinique.addEventListener('readystatechange', function() {
+			if (xhrHopitauxClinique.readyState === XMLHttpRequest.DONE && xhrHopitauxClinique.status === 200) {
+				hopitauxClinique = JSON.parse(xhrHopitauxClinique.responseText);
+			}
+		});
+		xhrHopitauxClinique.send(null);
+
+		// -------------------------------------------------------------------------------------
+
+		let map = new mapboxgl.Map({
+			container: 'map',
+			style: 'http://localhost:8081/styles/streets/style.json',
+			center: [3.883821, 43.609589],
+			zoom: 10,
+		});
+
+		monumentsHistoriquesInput.addEventListener('change', (event) => {
+			if (event.target.checked) {
+
+				map.addSource('monuments-historiques', {
+					type: 'geojson',
+					data: monumentsHistoriques
+				});
+				map.addLayer({
+					'id': 'monument',
+					'type': 'fill',
+					'source': 'monuments-historiques',
+					'paint': {
+						'fill-color': '#888888',
+						'fill-opacity': 0.8
+					},
+					'filter': ['==', '$type', 'Polygon']
+				});
+			} else {
+				map.removeLayer('monument')
+				map.removeSource('monuments-historiques')
+			}
+		})
+
+		// -----------------------------------------------------
+
+		airesJeuxInput.addEventListener('change', (event) => {
+			if (event.target.checked) {
+				map.addSource('aires-de-jeux', {
+					type: 'geojson',
+					data: airesJeux
+				});
+				map.addLayer({
+					'id': 'aireJeu',
+					'type': 'circle',
+					'source': 'aires-de-jeux',
+					'paint': {
+						'circle-radius': 6,
+						'circle-color': '#1e911c'
+					},
+					'filter': ['==', '$type', 'Point']
+				});
+			} else {
+				map.removeLayer('aireJeu')
+				map.removeSource('aires-de-jeux')
+			}
+		})
+
+		// ---------------------------------------------------
+
+		lieuxDenseignementsInput.addEventListener('change', (event) => {
+			if (event.target.checked) {
+				map.addSource('lieux-enseignements', {
+					type: 'geojson',
+					data: lieuxDenseignements
+				});
+				map.addLayer({
+					'id': 'lieuEnseignement',
+					'type': 'circle',
+					'source': 'lieux-enseignements',
+					'paint': {
+						'circle-radius': 6,
+						'circle-color': '#368BFF'
+					},
+					'filter': ['==', '$type', 'Point']
+				});
+			} else {
+				map.removeLayer('lieuEnseignement')
+				map.removeSource('lieux-enseignements')
+			}
+		})
+
+		// ------------------------------------------------------------------
+
+		hopitauxCliniqueInput.addEventListener('change', (event) => {
+			if (event.target.checked) {
+				map.addSource('hopitaux-clinique', {
+					type: 'geojson',
+					data: hopitauxClinique
+				});
+				map.addLayer({
+					'id': 'hopital-clinique',
+					'type': 'circle',
+					'source': 'hopitaux-clinique',
+					'paint': {
+						'circle-radius': 6,
+						'circle-color': '#F72828'
+					},
+					'filter': ['==', '$type', 'Point']
+				});
+			} else {
+				map.removeLayer('hopital-clinique')
+				map.removeSource('hopitaux-clinique')
+			}
+		})
+	</script>
+</body>
+</html>
