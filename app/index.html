@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <title>Montpellier - Map</title>
 	<link href="style.css" rel="stylesheet">
-	<link href='http://localhost:8081/mapbox-gl.css' rel='stylesheet' />
+	<link href='http://ec2-35-180-103-223.eu-west-3.compute.amazonaws.com:8081/mapbox-gl.css' rel='stylesheet' />
 
 </head>
 
@@ -28,7 +28,7 @@
 		<label for="hopitauxEtClinique">Hopitaux et clinique</label>
 	</div>
 
-	<script src='http://localhost:8081/mapbox-gl.js'></script>
+	<script src='http://ec2-35-180-103-223.eu-west-3.compute.amazonaws.com:8081/mapbox-gl.js'></script>
 
 	<script>
 		const monumentsHistoriquesInput = document.getElementById('monumentsHistoriques');
@@ -36,7 +36,7 @@
 		const lieuxDenseignementsInput = document.getElementById('lieuxDenseignements');
 		const hopitauxCliniqueInput = document.getElementById('hopitauxEtClinique');
 
-		let apiUrl = `http://${window.location.hostname}:5000/`;
+		let apiUrl = 'http://ec2-35-180-103-223.eu-west-3.compute.amazonaws.com:5000/';
 
 		// ---------------- Store DATA ---------------------
 
@@ -90,7 +90,7 @@
 
 		let map = new mapboxgl.Map({
 			container: 'map',
-			style: 'http://localhost:8081/styles/streets/style.json',
+			style: 'http://ec2-35-180-103-223.eu-west-3.compute.amazonaws.com:8081/styles/streets/style.json',
 			center: [3.883821, 43.609589],
 			zoom: 10,
 		});
